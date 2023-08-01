@@ -235,3 +235,7 @@ func (list *List) RemoveAll(val any) {
 		}
 	}
 }
+
+func (list *List) Empty() bool {
+	return list.size == 0
+}
