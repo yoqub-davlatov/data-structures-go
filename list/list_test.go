@@ -31,7 +31,7 @@ func checkTail(list *List, node *Node, t *testing.T) {
 	if list.tail != nil && node == nil {
 		t.Errorf("No nil tail reference while it should be\n")
 	}
-	if list.tail.Val != node.Val {
+	if list.head != nil && node != nil && list.tail.Val != node.Val {
 		t.Errorf("Wrong tail address: Expected %v, but found %v\n", node.Val, list.tail.Val)
 	}
 }
@@ -42,7 +42,7 @@ func checkHead(list *List, node *Node, t *testing.T) {
 	if list.head != nil && node == nil {
 		t.Errorf("No nil head reference while it should be\n")
 	}
-	if list.head.Val != node.Val {
+	if list.head != nil && node != nil && list.head.Val != node.Val {
 		t.Errorf("Wrong head address: Expected %v, but found %v\n", node.Val, list.head.Val)
 	}
 }
@@ -203,4 +203,23 @@ func TestList_MoveToBack(t *testing.T) {
 	list4.MoveToBack(i)
 	checkList(list4, []any{1, 3, 4, 5, 2}, t)
 	checkTail(list4, i, t)
+}
+
+func TestList_Remove(t *testing.T) {
+	list := ListInit()
+	a := list.PushBack(1)
+	b := list.PushBack(2)
+	c := list.PushBack(3)
+	d := list.PushBack(4)
+	list.Remove(a)
+	checkList(list, []any{2, 3, 4}, t)
+	list.Remove(c)
+	checkList(list, []any{2, 4}, t)
+	list.Remove(d);
+	checkList(list, []any{2}, t)
+	checkTail(list, b, t)
+	list.Remove(b)
+	checkList(list, []any{}, t)
+	checkHead(list, nil, t)
+	checkTail(list, nil, t)
 }
