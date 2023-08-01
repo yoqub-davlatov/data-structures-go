@@ -236,6 +236,7 @@ func (list *List) RemoveAll(val any) {
 	}
 }
 
+// Returns true if the list is empty, false otherwise
 func (list *List) Empty() bool {
 	return list.size == 0
 }
