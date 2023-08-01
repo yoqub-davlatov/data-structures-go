@@ -1,7 +1,7 @@
 package main
 
 import (
-	"example/main/list"
+	"github.com/yoqub-davlatov/data-structures-go/list"
 	"fmt"
 )
 
