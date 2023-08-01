@@ -26,24 +26,24 @@ func checkList(list *List, arr []any, t *testing.T) {
 
 func checkTail(list *List, node *Node, t *testing.T) {
 	if list.tail == nil && node != nil {
-		t.Errorf("Nil tail reference while it should not be")
+		t.Errorf("Nil tail reference while it should not be\n")
 	}
 	if list.tail != nil && node == nil {
-		t.Errorf("No nil tail reference while it should be")
+		t.Errorf("No nil tail reference while it should be\n")
 	}
 	if list.tail.Val != node.Val {
-		t.Errorf("Wrong tail address: Expected %v, but found %v", node.Val, list.tail.Val)
+		t.Errorf("Wrong tail address: Expected %v, but found %v\n", node.Val, list.tail.Val)
 	}
 }
 func checkHead(list *List, node *Node, t *testing.T) {
 	if list.head == nil && node != nil {
-		t.Errorf("Nil head reference while it should not be")
+		t.Errorf("Nil head reference while it should not be\n")
 	}
 	if list.head != nil && node == nil {
-		t.Errorf("No nil head reference while it should be")
+		t.Errorf("No nil head reference while it should be\n")
 	}
 	if list.head.Val != node.Val {
-		t.Errorf("Wrong head address: Expected %v, but found %v", node.Val, list.head.Val)
+		t.Errorf("Wrong head address: Expected %v, but found %v\n", node.Val, list.head.Val)
 	}
 }
 
@@ -105,7 +105,7 @@ func TestList_MoveAfter(t *testing.T) {
 	list.MoveAfter(i2, i1)
 	checkHead(list, i1, t)
 	checkTail(list, i2, t)
-	
+
 	list.MoveAfter(i1, i1)
 	list.MoveAfter(i2, i2)
 	i3 := list.PushBack(3)
@@ -122,11 +122,85 @@ func TestList_MoveBefore(t *testing.T) {
 	checkHead(list, i2, t)
 	checkTail(list, i1, t)
 	checkList(list, []any{2, 1}, t)
-	
+
 	list.MoveBefore(i1, i1)
 	list.MoveBefore(i2, i2)
 	i3 := list.PushFront(3)
 	checkHead(list, i3, t)
 	checkTail(list, i1, t)
 	checkList(list, []any{3, 2, 1}, t)
+}
+
+func TestList_MoveToFront(t *testing.T) {
+	list := ListInit()
+	head := list.PushBack(1)
+	list.PushBack(2)
+	list.PushBack(3)
+	tail := list.PushBack(4)
+	list.MoveToFront(head)
+	checkHead(list, head, t)
+	checkTail(list, tail, t)
+	checkList(list, []any{1, 2, 3, 4}, t)
+
+	list.MoveToFront(tail)
+	checkList(list, []any{4, 1, 2, 3}, t)
+
+	list2 := ListInit()
+	list2.PushBack(1)
+	list2.MoveToFront(list2.Front())
+	checkList(list2, []any{1}, t)
+	checkTail(list2, list2.Front(), t)
+
+	list3 := ListInit()
+	list3.PushFront(1)
+	tail = list3.PushFront(2)
+	list3.MoveToFront(list3.Back())
+	checkList(list3, []any{1, 2}, t)
+	checkTail(list3, tail, t)
+
+	list4 := ListInit()
+	list4.PushBack(1)
+	i := list4.PushBack(2)
+	list4.PushBack(3)
+	list4.PushBack(4)
+	list4.PushBack(5)
+	list4.MoveToFront(i)
+	checkList(list4, []any{2, 1, 3, 4, 5}, t)
+}
+
+func TestList_MoveToBack(t *testing.T) {
+	list := ListInit()
+	head := list.PushBack(1)
+	list.PushBack(2)
+	list.PushBack(3)
+	list.PushBack(4)
+	list.MoveToBack(head)
+	checkTail(list, head, t)
+	checkList(list, []any{2, 3, 4, 1}, t)
+
+	list.MoveToBack(head)
+	checkList(list, []any{2, 3, 4, 1}, t)
+
+	list2 := ListInit()
+	list2.PushBack(1)
+	list2.MoveToBack(list2.Back())
+	checkList(list2, []any{1}, t)
+	checkTail(list2, list2.Front(), t)
+
+	list3 := ListInit()
+	list3.PushFront(1)
+	head = list3.PushFront(2)
+	list3.MoveToBack(list3.Front())
+	checkList(list3, []any{1, 2}, t)
+	checkTail(list3, head, t)
+
+	list4 := ListInit()
+	list4.PushBack(1)
+	i := list4.PushBack(2)
+	list4.PushBack(3)
+	list4.PushBack(4)
+	list4.PushBack(5)
+	list4.MoveToBack(i)
+	checkList(list4, []any{1, 3, 4, 5, 2}, t)
+	checkTail(list4, i, t)
 }

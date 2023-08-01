@@ -143,7 +143,11 @@ func (list *List) MoveToBack(node *Node) {
 		panic("The value of 'node' should not be nil")
 	}
 	list.erase(node)
-	list.tail.next = node
+	if list.tail != nil {
+		list.tail.next = node
+	} else {
+		list.head = node
+	}
 	node.prev = list.tail
 	node.next = nil
 	list.tail = node
@@ -154,7 +158,11 @@ func (list *List) MoveToFront(node *Node) {
 		panic("The value of 'node' should not be nil")
 	}
 	list.erase(node)
-	list.head.prev = node
+	if list.head != nil {
+		list.head.prev = node
+	} else {
+		list.tail = node
+	}
 	node.next = list.head
 	node.prev = nil
 	list.head = node
