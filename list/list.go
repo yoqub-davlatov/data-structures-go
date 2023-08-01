@@ -35,6 +35,7 @@ func (list *List) Size() int {
 }
 
 func (list *List) PushBack(val any) *Node {
+	list.size++
 	newNode := &Node{Val: val, next: nil, prev: list.tail}
 	if list.head == nil {
 		list.head = newNode
@@ -50,6 +51,7 @@ func (list *List) Back() *Node {
 }
 
 func (list *List) PushFront(val any) *Node {
+	list.size++
 	newNode := &Node{Val: val, next: list.head, prev: nil}
 	if list.head == nil {
 		list.tail = newNode
@@ -65,6 +67,7 @@ func (list *List) Front() *Node {
 }
 
 func (list *List) InsertBefore(val any, before *Node) *Node {
+	list.size++
 	if before == nil {
 		panic("A value of 'before' variable must not be nil")
 	}
@@ -79,6 +82,7 @@ func (list *List) InsertBefore(val any, before *Node) *Node {
 }
 
 func (list *List) InsertAfter(val any, after *Node) *Node {
+	list.size++
 	if after == nil {
 		panic("A value of 'after' variable must not be nil")
 	}
@@ -99,6 +103,9 @@ func (list *List) MoveAfter(node, after *Node) {
 	if after == nil {
 		panic("A value of 'after' variable must not be nil")
 	}
+	if node == after {
+		return
+	}
 	list.erase(node)
 	node.prev = after
 	if after.next != nil {
@@ -117,6 +124,9 @@ func (list *List) MoveBefore(node, before *Node) {
 	if before == nil {
 		panic("A value of 'before' variable must not be nil")
 	}
+	if node == before {
+		return
+	}
 	list.erase(node)
 	node.next = before
 	if before.prev == nil {
@@ -128,11 +138,37 @@ func (list *List) MoveBefore(node, before *Node) {
 	before.prev = node
 }
 
+func (list *List) MoveToBack(node *Node) {
+	if node == nil {
+		panic("The value of 'node' should not be nil")
+	}
+	list.erase(node)
+	list.tail.next = node
+	node.prev = list.tail
+	node.next = nil
+	list.tail = node
+}
+
+func (list *List) MoveToFront(node *Node) {
+	if node == nil {
+		panic("The value of 'node' should not be nil")
+	}
+	list.erase(node)
+	list.head.prev = node
+	node.next = list.head
+	node.prev = nil
+	list.head = node
+}
+
 func (list *List) erase(node *Node) {
 	if node.prev != nil {
 		node.prev.next = node.next
+	} else {
+		list.head = node.next
 	}
 	if node.next != nil {
 		node.next.prev = node.prev
+	} else {
+		list.tail = node.prev
 	}
 }
